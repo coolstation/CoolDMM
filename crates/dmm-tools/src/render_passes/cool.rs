@@ -1,34 +1,3 @@
-/*
-Possible render pass functions:
-configure():               Configure pass from the map renderer config.
-path_filter():             Filter atoms based solely on their typepath.
-early_filter():            Filter atoms at the beginning of the process. Return `false` to discard the atom.
-expand():                  Expand atoms, such as spawners into the atoms they spawn. Return `false` to discard the original atom.
-adjust_sprite()
-overlays():                Apply overlays *and* underlays to an atom, in the form of pseudo-atoms.
-neighborhood_appearance():
-late_filter():             Filter atoms at the end of the process, after they have been taken into account by their neighbors.
-sprite_filter():
-
-Order of execution:
-configure()
-path_filter()
-early_filter()
-expand()
-late_filter()
-adjust_sprite()
-overlays()
-neighborhood_appearance()
-sprite_filter()
-
-
-Neighborhood
-
-0 1 2
-3 4 5
-6 7 8
-*/
-
 use dm::dmi::Dir;
 
 use super::*;
