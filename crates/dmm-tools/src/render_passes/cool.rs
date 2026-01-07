@@ -1,9 +1,19 @@
+/*******************************************************************************
+* Render Passes for Coolstation
+* (may be compatible with other Gooncode based servers)
+*
+* SpacingNevada 2026
+*
+* If they're not working for you give me a ping on the Coolstation Discord
+* and I'll see what I can do for ya
+*******************************************************************************/
 use dm::dmi::Dir;
 
 use super::*;
 
 use rand::seq::SliceRandom;
 
+// Helpers for connecting sprites
 const N_NORTH: usize = 1;
 const N_SOUTH: usize = 2;
 const N_EAST: usize = 4;
@@ -76,6 +86,7 @@ const FLOOR_EQUIP_LAYER1: f32 = TURF_LAYER + 0.3;
 
 const EFFECTS_LAYER_BASE: f32 = 30.0;
 
+/// Turns wingrille spawners into windows and grilles and sets their colour.
 #[derive(Default)]
 pub struct WinGrilles;
 impl RenderPass for WinGrilles {
@@ -117,6 +128,7 @@ impl RenderPass for WinGrilles {
     }
 }
 
+/// Hides all the holiday decorations.
 #[derive(Default)]
 pub struct HideHolidays;
 impl RenderPass for HideHolidays {
@@ -135,6 +147,7 @@ impl RenderPass for HideHolidays {
     }
 }
 
+/// Hides disposal pipes.
 #[derive(Default)]
 pub struct HidePipes;
 impl RenderPass for HidePipes {
@@ -143,6 +156,7 @@ impl RenderPass for HidePipes {
     }
 }
 
+// Hides power cables.
 #[derive(Default)]
 pub struct HideWires;
 impl RenderPass for HideWires {
@@ -151,6 +165,7 @@ impl RenderPass for HideWires {
     }
 }
 
+/// Converts random item spawners into a random selection from their item lists.
 #[derive(Default)]
 pub struct CoolRandom;
 impl RenderPass for CoolRandom {
@@ -172,7 +187,7 @@ impl RenderPass for CoolRandom {
                             Constant::Prefab(ref fab) => {
                                 type_key = dm::ast::FormatTreePath(&fab.path).to_string();
                                 type_key.as_str()
-                            }
+                            },
                             _ => continue,
                         };
                         items.push(Atom::from(objtree.expect(reference)));
@@ -182,7 +197,7 @@ impl RenderPass for CoolRandom {
                         output.push(rand_item.to_owned());
                     }
                     false
-                }
+                },
                 _ => true,
             }
         } else {
@@ -220,6 +235,7 @@ impl RenderPass for CoolRandom {
     }
 }
 
+/// Catch-all for any overlays.
 #[derive(Default)]
 pub struct CoolOverlays;
 impl RenderPass for CoolOverlays {
@@ -279,7 +295,7 @@ impl RenderPass for CoolOverlays {
                     Some(Dir::South) => sprite.ofs_y = y_offset.unwrap(),
                     Some(Dir::East) => sprite.ofs_x = x_offset.unwrap(),
                     Some(Dir::West) => sprite.ofs_x = x_offset.unwrap(),
-                    _ => {}
+                    _ => {},
                 }
             } else {
                 let y_offset = atom.get_var_inner("pixel_y", objtree);
@@ -303,7 +319,7 @@ impl RenderPass for CoolOverlays {
                 Dir::South => sprite.ofs_y = 24,
                 Dir::East => sprite.ofs_x = -21,
                 Dir::West => sprite.ofs_x = 21,
-                _ => {}
+                _ => {},
             }
         } else if sprite.icon_state == "celltop-P" {
             sprite.icon_state = "cryo_bottom_1";
@@ -403,6 +419,7 @@ impl RenderPass for CoolLayers {
     }
 }
 
+/// Applies planes and layers to sprites so they're drawn in the right order.
 impl CoolLayers {
     fn cool_layer_for_path(&self, p: &str) -> Option<Layer> {
         if ispath(p, "/turf/floor/plating/") {
@@ -499,6 +516,7 @@ impl CoolLayers {
     }
 }
 
+/// Hide ocean surface sprites.
 #[derive(Default)]
 pub struct HideOcean;
 impl RenderPass for HideOcean {
@@ -507,6 +525,7 @@ impl RenderPass for HideOcean {
     }
 }
 
+/// Don't show pipes if they're under floor tiles.
 #[derive(Default)]
 pub struct OccludePipes;
 impl RenderPass for OccludePipes {
@@ -545,6 +564,7 @@ impl RenderPass for OccludePipes {
     }
 }
 
+/// Don't show power cables if they're under floor tiles.
 #[derive(Default)]
 pub struct OccludeWires;
 impl RenderPass for OccludeWires {
@@ -573,6 +593,7 @@ impl RenderPass for OccludeWires {
     }
 }
 
+/// Hides objects listed in the config toml or in icons/map-editing/mark.dmi
 #[derive(Default)]
 pub struct CoolInvisible {
     overrides: Vec<String>,
@@ -609,6 +630,7 @@ impl RenderPass for CoolInvisible {
     }
 }
 
+/// Renders only power cables of any kind.
 #[derive(Default)]
 pub struct CoolWires;
 impl RenderPass for CoolWires {
@@ -617,6 +639,7 @@ impl RenderPass for CoolWires {
     }
 }
 
+/// Renders only sewage disposal pipes.
 #[derive(Default)]
 pub struct CoolSewage;
 impl RenderPass for CoolSewage {
@@ -627,6 +650,7 @@ impl RenderPass for CoolSewage {
     }
 }
 
+/// Renders only disposal pipes of any kind.
 #[derive(Default)]
 pub struct CoolPipes;
 impl RenderPass for CoolPipes {
@@ -635,6 +659,7 @@ impl RenderPass for CoolPipes {
     }
 }
 
+/// Renders only power cables and disposal pipes of any kind.
 #[derive(Default)]
 pub struct CoolWiresAndPipes;
 impl RenderPass for CoolWiresAndPipes {
@@ -643,6 +668,7 @@ impl RenderPass for CoolWiresAndPipes {
     }
 }
 
+/// Renders connecting sprites correctly.
 #[derive(Default)]
 pub struct CoolConnects;
 impl RenderPass for CoolConnects {
@@ -810,6 +836,7 @@ impl RenderPass for CoolConnects {
     }
 }
 
+/// Hide items on the same tile as a container.
 #[derive(Default)]
 pub struct CoolContainers;
 impl RenderPass for CoolContainers {
@@ -835,6 +862,7 @@ impl RenderPass for CoolContainers {
     }
 }
 
+/// Late filter for area sprites. Allows access to area data in earlier passes.
 #[derive(Default)]
 pub struct CoolHideAreas;
 impl RenderPass for CoolHideAreas {
@@ -843,7 +871,8 @@ impl RenderPass for CoolHideAreas {
     }
 }
 
-// Yoinked directly from dm-langserver/src/color.rs
+/// Parses hex color codes into RGBA arrays
+/// Yoinked directly from dm-langserver/src/color.rs
 fn parse_hex(hex: &str) -> Option<[u8; 4]> {
     let mut sum = 0;
     for ch in hex.chars() {
