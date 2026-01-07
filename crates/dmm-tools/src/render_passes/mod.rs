@@ -196,6 +196,109 @@ pub const RENDER_PASSES: &[RenderPassInfo] = &[
         "Renders only power cables and atmospheric pipes.",
         false
     ),
+    pass!(
+        WinGrilles,
+        "wingrilles",
+        "Include Coolstation-style wingrilles. [cool]",
+        true
+    ),
+    pass!(
+        HideHolidays,
+        "hide-holidays",
+        "Do not render holiday related decals. [cool]",
+        true
+    ),
+    pass!(
+        HidePipes,
+        "hide-pipes",
+        "Do not render atmospherics pipes. [cool]",
+        false
+    ),
+    pass!(
+        HideWires,
+        "hide-wires",
+        "Do not render power cables. [cool]",
+        false
+    ),
+    pass!(
+        CoolRandom,
+        "cool-random",
+        "Replace random spawners with one of their possibilities. [cool]",
+        true
+    ),
+    pass!(
+        CoolOverlays,
+        "cool-overlays",
+        "Add overlays and underlays to atoms which usually have them. [cool]",
+        true
+    ),
+    pass!(
+        CoolLayers,
+        "cool-layers",
+        "Layer atoms according to in-game rules. [cool]",
+        true
+    ),
+    pass!(
+        HideOcean,
+        "hide-ocean",
+        "Do not render ocean surface tiles, instead leaving transparency. [cool]",
+        true
+    ),
+    pass!(
+        OccludePipes,
+        "occlude-pipes",
+        "Do not render pipes over floor tiles. [cool]",
+        true
+    ),
+    pass!(
+        OccludeWires,
+        "occlude-wires",
+        "Do not render wires over floor tiles. [cool]",
+        true
+    ),
+    pass!(
+        CoolInvisible,
+        "cool-invisible",
+        "Do not render invisible or ephemeral objects such as mapping helpers.",
+        true
+    ),
+    pass!(CoolWires, "cool-wires", "Render only wires. [cool]", false),
+    pass!(
+        CoolPipes,
+        "cool-pipes",
+        "Render only disposal pipes. [cool]",
+        false
+    ),
+    pass!(
+        CoolWiresAndPipes,
+        "cool-wires-and-pipes",
+        "Render only wires and disposal pipes. [cool]",
+        false
+    ),
+    pass!(
+        CoolSewage,
+        "cool-sewage",
+        "Render only sewage pipes. [cool]",
+        false
+    ),
+    pass!(
+        CoolConnects,
+        "cool-connects",
+        "Renders connected tiles. [cool]",
+        true
+    ),
+    pass!(
+        CoolContainers,
+        "cool-containers",
+        "Render only the container and not its contents",
+        true
+    ),
+    pass!(
+        CoolHideAreas,
+        "cool-hide-areas",
+        "Do not render area overlays. [cool]",
+        true
+    ),
 ];
 
 pub fn configure(
