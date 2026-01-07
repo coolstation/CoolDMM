@@ -9,6 +9,12 @@ mod smart_cables;
 mod structures;
 mod transit_tube;
 
+pub use self::cool::{
+    CoolConnects, CoolContainers, CoolHideAreas, CoolInvisible, CoolLayers, CoolOverlays,
+    CoolPipes, CoolRandom, CoolSewage, CoolWires, CoolWiresAndPipes, HideHolidays, HideOcean,
+    HidePipes, HideWires, OccludePipes, OccludeWires, WinGrilles,
+};
+
 pub use self::icon_smoothing::IconSmoothing as IconSmoothing2016;
 pub use self::icon_smoothing_2020::IconSmoothing;
 pub use self::random::Random;
