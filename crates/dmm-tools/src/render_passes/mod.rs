@@ -2,6 +2,7 @@ use crate::minimap::{Atom, GetVar, Layer, Neighborhood, Sprite};
 use dm::constants::Constant;
 use dm::objtree::*;
 
+mod cool;
 mod icon_smoothing;
 mod icon_smoothing_2020;
 mod random;
