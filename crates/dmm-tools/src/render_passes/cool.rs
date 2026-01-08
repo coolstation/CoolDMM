@@ -230,6 +230,43 @@ impl RenderPass for CoolRandom {
         }
     }
 
+    fn overlays<'a>(
+        &self,
+        atom: &Atom<'a>,
+        _objtree: &'a ObjectTree,
+        _underlays: &mut Vec<Sprite<'a>>,
+        overlays: &mut Vec<Sprite<'a>>,
+        _bump: &'a bumpalo::Bump, // TODO: kind of a hacky way to pass this
+    ) {
+        if atom.istype("/obj/landmark/random_room") {
+            if atom.istype("/obj/landmark/random_room/size5x3") {
+                overlays.push(Sprite {
+                    icon: "icons/map-editing/random-rooms/5x3.dmi",
+                    icon_state: "",
+                    ..Default::default()
+                })
+            } else if atom.istype("/obj/landmark/random_room/size3x5") {
+                overlays.push(Sprite {
+                    icon: "icons/map-editing/random-rooms/3x5.dmi",
+                    icon_state: "",
+                    ..Default::default()
+                })
+            } else if atom.istype("/obj/landmark/random_room/size3x3") {
+                overlays.push(Sprite {
+                    icon: "icons/map-editing/random-rooms/3x3.dmi",
+                    icon_state: "",
+                    ..Default::default()
+                })
+            } else if atom.istype("/obj/landmark/random_room/size5x4") {
+                overlays.push(Sprite {
+                    icon: "icons/map-editing/random-rooms/5x4.dmi",
+                    icon_state: "",
+                    ..Default::default()
+                })
+            }
+        }
+    }
+
     fn late_filter(&self, atom: &Atom, _objtree: &ObjectTree) -> bool {
         !atom.istype("/obj/random_item_spawner/")
     }
@@ -327,6 +364,8 @@ impl RenderPass for CoolOverlays {
             sprite.icon_state = "turretCover";
         } else if sprite.icon_state == "f_spawn" {
             sprite.icon_state = "door_open";
+        } else if sprite.icon_state == "coolerbase" {
+            sprite.icon_state = "water_fountain1"
         }
     }
 
@@ -534,7 +573,7 @@ impl RenderPass for OccludePipes {
         atom: &Atom<'a>,
         objtree: &'a ObjectTree,
         neighborhood: &Neighborhood<'a, '_>,
-        _output: &mut Vec<Sprite<'a>>,
+        output: &mut Vec<Sprite<'a>>,
         _bump: &'a bumpalo::Bump,
     ) -> bool {
         if atom.istype("/obj/disposalpipe") {
@@ -555,6 +594,40 @@ impl RenderPass for OccludePipes {
                     && atom.get_var("level", objtree).to_int().unwrap_or(2) == 1
                 {
                     under_tile = true;
+                }
+            }
+            !under_tile
+        } else if atom.istype("/obj/machinery/atmospherics/unary/vent_pump")
+            || atom.istype("/obj/machinery/atmospherics/unary/vent_scrubber")
+        {
+            let mut under_tile = false;
+            for inner_atom in neighborhood.center() {
+                if inner_atom.istype("/obj/grille/catwalk")
+                    || inner_atom.get_var("intact", objtree).to_bool()
+                        && atom.get_var("level", objtree).to_int().unwrap_or(2) == 1
+                {
+                    under_tile = true;
+                    if atom.sprite.icon_state == "out" {
+                        output.push(Sprite {
+                            icon_state: "hout",
+                            ..atom.sprite
+                        });
+                    } else if atom.sprite.icon_state == "in" {
+                        output.push(Sprite {
+                            icon_state: "hin",
+                            ..atom.sprite
+                        });
+                    } else if atom.sprite.icon_state == "off" {
+                        output.push(Sprite {
+                            icon_state: "hoff",
+                            ..atom.sprite
+                        });
+                    } else if atom.sprite.icon_state == "on" {
+                        output.push(Sprite {
+                            icon_state: "hon",
+                            ..atom.sprite
+                        });
+                    }
                 }
             }
             !under_tile
@@ -618,7 +691,7 @@ impl RenderPass for CoolInvisible {
         for pathtype in self.overrides.iter() {
             // Note: You *cannot* just `return !atom.istype(pathtype)`
             // If you do that, you skip the rest of the loop iterations
-            if atom.istype(pathtype) {
+            if atom.istype(pathtype) && !atom.istype("/obj/landmark/random_room") {
                 return false;
             }
         }
