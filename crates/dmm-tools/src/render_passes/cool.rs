@@ -444,6 +444,11 @@ impl RenderPass for CoolOverlays {
                 icon_state: "sleeperlid0",
                 ..atom.sprite
             })
+        } else if atom.istype("/obj/machinery/portable_atmospherics/canister/") {
+            overlays.push(Sprite {
+                icon_state: "can-o3",
+                ..atom.sprite
+            })
         }
     }
 }
