@@ -449,6 +449,18 @@ impl RenderPass for CoolOverlays {
                 icon_state: "can-o3",
                 ..atom.sprite
             })
+        } else if atom.istype("/obj/machinery/disposal")
+            && !atom.istype("/obj/machinery/disposal/small")
+            && !atom.istype("/obj/machinery/disposal/brig/small")
+            && !atom.istype("/obj/machinery/disposal/ore/small")
+            && !atom.istype("/obj/machinery/disposal/cart_port")
+            && !atom.istype("/obj/machinery/disposal/transport")
+            && !atom.istype("/obj/machinery/disposal/alert_a_chump")
+        {
+            overlays.push(Sprite {
+                icon_state: "disposal-ready",
+                ..atom.sprite
+            })
         }
     }
 }
