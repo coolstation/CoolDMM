@@ -439,6 +439,11 @@ impl RenderPass for CoolOverlays {
                     ..atom.sprite
                 });
             }
+        } else if atom.istype("/obj/machinery/sleeper") {
+            overlays.push(Sprite {
+                icon_state: "sleeperlid0",
+                ..atom.sprite
+            })
         }
     }
 }
