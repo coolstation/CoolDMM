@@ -439,16 +439,22 @@ impl RenderPass for CoolOverlays {
                     ..atom.sprite
                 });
             }
+
+        // Sleeper lids
         } else if atom.istype("/obj/machinery/sleeper") {
             overlays.push(Sprite {
                 icon_state: "sleeperlid0",
                 ..atom.sprite
-            })
+            });
+
+        // Gas canister lights
         } else if atom.istype("/obj/machinery/portable_atmospherics/canister/") {
             overlays.push(Sprite {
                 icon_state: "can-o3",
                 ..atom.sprite
-            })
+            });
+
+        // Disposal chute lights
         } else if atom.istype("/obj/machinery/disposal")
             && !atom.istype("/obj/machinery/disposal/small")
             && !atom.istype("/obj/machinery/disposal/brig/small")
@@ -460,7 +466,7 @@ impl RenderPass for CoolOverlays {
             overlays.push(Sprite {
                 icon_state: "disposal-ready",
                 ..atom.sprite
-            })
+            });
         }
     }
 }
@@ -812,19 +818,20 @@ impl RenderPass for CoolConnects {
                 }
             }
             true
-        } else if atom.istype("/obj/table/")
-            && !atom.istype("/obj/table/folding")
-            && !atom.istype("/obj/table/glass")
-            && !atom.istype("/obj/table/surgery_tray")
+        } else if atom.istype("/obj/stool/bench")
+            || atom.istype("/obj/table/")
+                && !atom.istype("/obj/table/folding")
+                && !atom.istype("/obj/table/glass")
+                && !atom.istype("/obj/table/surgery_tray")
         {
             let mut linked_dirs: usize = 0;
             for &check_dir in Dir::ALL {
                 let turf = neighborhood.offset(check_dir);
                 for inner_atom in turf {
-                    if inner_atom.istype("/obj/table/")
-                        && !atom.istype("/obj/table/folding")
-                        && !atom.istype("/obj/table/glass")
-                        && !atom.istype("/obj/table/surgery_tray")
+                    if inner_atom.istype(atom.get_path())
+                    // && !atom.istype("/obj/table/folding")
+                    // && !atom.istype("/obj/table/glass")
+                    // && !atom.istype("/obj/table/surgery_tray")
                     {
                         match check_dir {
                             Dir::North => linked_dirs |= N_NORTH,
